@@ -2,19 +2,37 @@
 
 const gulp = require('gulp');
 const webpack = require('webpack-stream');
-const babel = require('gulp-babel');
 const browserSync = require('browser-sync');
 const nodemon = require('gulp-nodemon');
+const sourcemaps = require('gulp-sourcemaps');
 const colors = require('colors');
 
 const bundleTask = function () {
 	gulp.src('src/entry.js').pipe(webpack({
+		devtool: 'source-map',
+		module: {
+			rules: [{
+				test: /\.css$/,
+				use: [
+					{
+						loader: "babel-loader",
+						options: {
+							presets: ['@babel/preset-env']
+						}
+					},
+					{
+						loader: "style-loader"
+					},
+					{
+						loader: "css-loader"
+					},
+				]
+			}]
+		},
 		output: {
 			filename: 'bundle.js'
 		}
-	})).pipe(babel({
-		presets: ['env']
-	})).pipe(gulp.dest('static/js/')).on('end',function () {
+	})).pipe(gulp.dest('static/js/')).on('end', function () {
 		console.log('[Webpack] Compiled'.cyan);
 	});
 
@@ -39,7 +57,7 @@ gulp.task('nodemon', function (cb) {
 
 	return nodemon({
 		script: 'index.js',
-		ignore: ['./.vscode/','./src/','./static/', 'gulpfile.js']
+		ignore: ['./.vscode/', './src/', './static/', 'gulpfile.js']
 	}).on('start', function () {
 		if (!started) {
 			cb();

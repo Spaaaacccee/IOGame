@@ -1,7 +1,2 @@
-class apple {
-	hi() {
-		document.write("hi")
-	}
-}
-
-(new apple()).hi()
+import './css/style.css';
+import core from './js/core.js';
