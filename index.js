@@ -1,23 +1,23 @@
-const Express = require('express');
+const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 
-const App = Express();
+const app = express();
 
 // parse application/x-www-form-urlencoded
-App.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
-App.use(bodyParser.json())
+app.use(bodyParser.json())
 
-Express.static('static');
+app.use(express.static('static'))
 
-App.use('/', (req, res) => {
+app.use('/', (req, res) => {
     res.sendFile('/static/index.html',{root:__dirname});
 });
 
 const port = 5000;
 
-App.listen(port);
+app.listen(port);
 
 console.log(`Server started on ${port}`);
